@@ -9,11 +9,13 @@
     "@supabase/supabase-js": "^2.47.13",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-fileupload": "^1.5.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/express-fileupload": "^1.5.1",
     "nodemon": "^3.1.9",
     "tsx": "^4.7.0",
     "typescript": "^5.7.3"
