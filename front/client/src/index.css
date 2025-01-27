@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-200px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+}
+
+@keyframes jump-in {
+    0% {
+      transform: translateY(250px);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+}
+
+.link-hover:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 15s linear infinite;
+}
+
+/* Exemple de configuration dans Tailwind CSS */
+.col-span-1 {
+  grid-column: span 1;
+}
+
+.col-span-2 {
+  grid-column: span 2;
+}
+
+.col-span-3 {
+  grid-column: span 3;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  
+}
+
+.parallax {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax__header {
+  z-index: 2;
+  padding: var(--section-padding) var(--container-padding);
+  justify-content: center;
+  align-items: center;
+  min-height: 100svh;
+  display: flex;
+  position: relative;
+}
+
+.parallax__visuals {
+  object-fit: cover;
+  width: 100%;
+  max-width: none;
+  height: 120%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.parallax__layers {
+  object-fit: cover;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.parallax__layer-img {
+  pointer-events: none;
+  object-fit: cover;
+  width: 100%;
+  max-width: none;
+  height: 117.5%;
+  position: absolute;
+  top: -17.5%;
+  left: 0;
+}
+
+.parallax__layer-title {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.parallax__fade {
+  z-index: 30;
+  object-fit: cover;
+  width: 100%;
+  max-width: none;
+  height: 20%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.parallax__black-line-overflow {
+  z-index: 20;
+  background-color: black;
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+}
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@media (max-width: 768px) {
+  .waves {
+    height: 40px;
+    min-height: 40px;
+  }
+  .content {
+    height: 30vh;
+  }
+  h1 {
+    font-size: 24px;
+  }
+}

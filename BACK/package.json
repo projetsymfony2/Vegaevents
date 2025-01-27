@@ -1,0 +1,21 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --exec tsx src/index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.13",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "tsx": "^4.7.0",
+    "typescript": "^5.7.3"
+  }
+}
