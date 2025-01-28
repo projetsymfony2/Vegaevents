@@ -1,6 +1,5 @@
-// cvRoutes.ts
 import express from 'express';
-import { uploadCV } from '../Controllers/cvController';
+import { uploadCV, getAllCVs } from '../Controllers/cvController';
 
 const router = express.Router();
 
@@ -12,5 +11,8 @@ router.post('/upload-cv', async (req, res) => {
     res.status(500).send('Erreur lors du téléchargement du CV.');
   }
 });
+
+// Route pour récupérer tous les CVs
+router.get('/get-cv', getAllCVs);
 
 export default router;
