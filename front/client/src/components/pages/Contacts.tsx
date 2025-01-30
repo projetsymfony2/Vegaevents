@@ -155,87 +155,102 @@ const ContactForm: React.FC = () => {
   }, [submissionStatus]);
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="relative z-10 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <input
-            type="text"
-            placeholder="Nom"
-            name="name"
-            value={formState.name}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
-              errors.name && touched.has('name') ? 'border-red-500' : 'border-gray-300'
-            }`}
-            aria-invalid={!!errors.name}
-            aria-describedby={errors.name ? "name-error" : undefined}
-            required
-          />
-          {errors.name && touched.has('name') && (
-            <p className="text-sm text-red-500" id="name-error">{errors.name}</p>
-          )}
+          {/* Nom */}
+          <div className="flex flex-col">
+            <input
+              type="text"
+              placeholder="Nom"
+              name="name"
+              value={formState.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`w-full min-h-[50px] rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
+                errors.name && touched.has('name') ? 'border-red-500' : 'border-gray-300'
+              }`}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "name-error" : undefined}
+              required
+            />
+            <div className="min-h-[40px]">
+              {errors.name && touched.has('name') && (
+                <p className="text-sm text-red-500 mt-1" id="name-error">{errors.name}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col">
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={formState.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
+                errors.email && touched.has('email') ? 'border-red-500' : 'border-gray-300'
+              }`}
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-error" : undefined}
+              required
+            />
+            <div className="min-h-[40px]">
+              {errors.email && touched.has('email') && (
+                <p className="text-sm text-red-500 mt-1" id="email-error">{errors.email}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Téléphone */}
+          <div className="flex flex-col">
+            <input
+              type="tel"
+              placeholder="Téléphone"
+              name="phone"
+              value={formState.phone}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
+                errors.phone && touched.has('phone') ? 'border-red-500' : 'border-gray-300'
+              }`}
+              aria-invalid={!!errors.phone}
+              aria-describedby={errors.phone ? "phone-error" : undefined}
+            />
+            <div className="min-h-[40px]">
+              {errors.phone && touched.has('phone') && (
+                <p className="text-sm text-red-500 mt-1" id="phone-error">{errors.phone}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Message */}
+          <div className="flex flex-col">
+            <textarea
+              placeholder="Message"
+              name="message"
+              value={formState.message}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              rows={3.9}
+              className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
+                errors.message && touched.has('message') ? 'border-red-500' : 'border-gray-300'
+              }`}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "message-error" : undefined}
+              required
+            />
+            <div className="min-h-[40px]">
+              {errors.message && touched.has('message') && (
+                <p className="text-sm text-red-500 mt-1" id="message-error">{errors.message}</p>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={formState.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
-              errors.email && touched.has('email') ? 'border-red-500' : 'border-gray-300'
-            }`}
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "email-error" : undefined}
-            required
-          />
-          {errors.email && touched.has('email') && (
-            <p className="text-sm text-red-500" id="email-error">{errors.email}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <input
-            type="tel"
-            placeholder="Téléphone"
-            name="phone"
-            value={formState.phone}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
-              errors.phone && touched.has('phone') ? 'border-red-500' : 'border-gray-300'
-            }`}
-            aria-invalid={!!errors.phone}
-            aria-describedby={errors.phone ? "phone-error" : undefined}
-          />
-          {errors.phone && touched.has('phone') && (
-            <p className="text-sm text-red-500" id="phone-error">{errors.phone}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <textarea
-            placeholder="Message"
-            name="message"
-            value={formState.message}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            rows={6}
-            className={`w-full rounded-lg py-3 px-4 text-gray-800 text-sm outline-[#a91079] border ${
-              errors.message && touched.has('message') ? 'border-red-500' : 'border-gray-300'
-            }`}
-            aria-invalid={!!errors.message}
-            aria-describedby={errors.message ? "message-error" : undefined}
-            required
-          />
-          {errors.message && touched.has('message') && (
-            <p className="text-sm text-red-500" id="message-error">{errors.message}</p>
-          )}
-        </div>
-
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -257,27 +272,22 @@ const ContactForm: React.FC = () => {
               className="mr-2"
               viewBox="0 0 16 16"
             >
-              <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11z" />
+              <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.5.5 0 1 1 .728-.684l5.831 8.987 2.933-4.63-6.457-1.47a.5.5 0 1 1 .107-.99l7.883 1.772L15.854.146z"></path>
             </svg>
           )}
-          {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
+          Envoyer
         </button>
       </form>
 
+      {/* Statut de la soumission */}
       {submissionStatus === 'success' && (
-        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-green-700">Message envoyé avec succès !</p>
-        </div>
+        <p className="mt-4 text-green-500">Formulaire envoyé avec succès !</p>
       )}
-      
       {submissionStatus === 'error' && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-700">Une erreur s'est produite lors de l'envoi du message.</p>
-        </div>
+        <p className="mt-4 text-red-500">Erreur lors de l'envoi du formulaire.</p>
       )}
     </div>
   );
 };
 
 export default ContactForm;
-

@@ -6,7 +6,7 @@ import ButtonBackoffice from "../atoms/Button/ButtonBackoffice";
 
 const NAV_LINKS = [
   { to: "/animation", label: "Animation" },
-  { to: "/evenements", label: "Événements" },
+  { to: "/aboutevents", label: "Événements" },
   { to: "#about", label: "Qui sommes-nous" },
   { to: "/contact", label: "Contact" },
   { to: "/recrutement", label: "Recrutement" },
@@ -39,15 +39,12 @@ const Navbar: React.FC = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Si nous ne sommes pas sur la page d'accueil, naviguer vers elle
     if (location.pathname !== '/') {
       navigate('/');
-      // Attendre que la navigation soit terminée avant de scroll
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 100);
     } else {
-      // Si nous sommes déjà sur la page d'accueil, juste scroll vers le haut
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -73,9 +70,8 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
-        {/* Flex container principal */}
-        <div className="flex items-center h-20">
-          {/* Logo - largeur fixe */}
+        <div className="flex items-center h-20 justify-between">
+          {/* Logo */}
           <div className="w-[150px] flex-shrink-0">
             <button
               onClick={handleLogoClick}
@@ -86,7 +82,7 @@ const Navbar: React.FC = () => {
             </button>
           </div>
 
-          {/* Le reste du code reste identique... */}
+          {/* Menu desktop */}
           <div className="hidden md:flex flex-1 justify-center">
             <div className="flex space-x-8">
               {NAV_LINKS.map(({ to, label }) => (
@@ -128,10 +124,12 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
+          {/* Button Backoffice */}
           <div className="hidden md:flex w-[150px] justify-end flex-shrink-0">
             <ButtonBackoffice onClick={handleLoginClick} />
           </div>
 
+          {/* Icone menu mobile */}
           <div className="flex md:hidden ml-auto">
             <button
               onClick={toggleMenu}
@@ -144,7 +142,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Menu Mobile inchangé */}
+        {/* Menu mobile */}
         <div 
           className={`md:hidden transition-all duration-300 ease-in-out ${
             isMenuOpen 
