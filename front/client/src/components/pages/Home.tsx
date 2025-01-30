@@ -1,46 +1,44 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import About from '../organisms/About';
 import Services from '../organisms/Services';
 import ClientReviews from '../organisms/ClientReview';
 import Button from '../atoms/btviewmore';
 import Homepage from '../Acceuil';
 import PageContact from '../pages/PageContact';
+import Personnel from '../organisms/Personnel';
 
 const Home: React.FC = () => {
-  const headerRef = useRef<HTMLDivElement>(null); // Référence pour Header
-  const aboutRef = useRef<HTMLDivElement>(null); // Référence pour About
-  const servicesRef = useRef<HTMLDivElement>(null); // Référence pour Services
-  const clientReviewsRef = useRef<HTMLDivElement>(null); // Référence pour ClientReviews
-  const contactRef = useRef<HTMLDivElement>(null); // Référence pour Contact
+  const headerRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const personnelRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const clientReviewsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
-  // Utiliser useMemo pour stabiliser sectionsRefs
-  const sectionsRefs = useMemo(
-    () => [headerRef, aboutRef, servicesRef, clientReviewsRef, contactRef], // Inclure toutes les sections
-    [headerRef, aboutRef, servicesRef, clientReviewsRef, contactRef] // Dépendances de useMemo
-  );
-
+  const sectionsRefs = useMemo(() => [
+    headerRef, 
+    aboutRef, 
+    personnelRef,  // Ajout de la section "Personnel"
+    servicesRef, 
+    clientReviewsRef, 
+    contactRef
+  ], []);
   const [visibleSectionIndex, setVisibleSectionIndex] = useState(0);
 
-  // Détecter la section actuellement visible
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5, // Déclencher lorsque 50% de la section est visible
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = sectionsRefs.findIndex((ref) => ref.current === entry.target);
-          if (index !== -1) {
-            setVisibleSectionIndex(index);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = sectionsRefs.findIndex((ref) => ref.current === entry.target);
+            if (index !== -1) {
+              setVisibleSectionIndex(index);
+            }
           }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+        });
+      },
+      { threshold: 0.5 }
+    );
 
     sectionsRefs.forEach((ref) => {
       if (ref.current) {
@@ -55,9 +53,8 @@ const Home: React.FC = () => {
         }
       });
     };
-  }, [sectionsRefs]); // sectionsRefs est maintenant stable
+  }, [sectionsRefs]);
 
-  // Fonction pour faire défiler vers la section suivante
   const scrollToNextSection = () => {
     const nextSectionIndex = (visibleSectionIndex + 1) % sectionsRefs.length;
     const nextSectionRef = sectionsRefs[nextSectionIndex];
@@ -67,39 +64,30 @@ const Home: React.FC = () => {
     }
   };
 
-  // Vérifier si l'utilisateur est sur la dernière section
   const isLastSection = visibleSectionIndex === sectionsRefs.length - 1;
 
   return (
     <div className="flex flex-col justify-start">
-      {/* En-tête avec effet de parallaxe */}
       <div ref={headerRef}>
         <Homepage />
       </div>
-
-      {/* Section "À propos" */}
-      <div ref={aboutRef}>
+      <div ref={aboutRef} id="about">
         <About />
       </div>
-
-      {/* Section "Services" */}
+      <div ref={personnelRef}>
+        <Personnel />
+      </div>
       <div ref={servicesRef}>
         <Services />
       </div>
-
-      {/* Section "Avis Clients" */}
       <div ref={clientReviewsRef}>
         <ClientReviews />
       </div>
-
-      {/* Section "Contact" */}
       <div ref={contactRef}>
         <PageContact />
       </div>
-
-      {/* Bouton fixe en bas à droite */}
-      {!isLastSection && ( // Masquer le bouton sur la dernière section
-        <div className="fixed bottom-4 right-10 z-20"> {/* Changé de left-10 à right-10 */}
+      {!isLastSection && (
+        <div className="fixed bottom-4 right-10 z-20">
           <Button
             onClick={scrollToNextSection}
             icon={

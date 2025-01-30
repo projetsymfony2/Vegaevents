@@ -1,163 +1,180 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import Logo from '../atoms/Logo';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import Logo from "../atoms/Logo";
+import ButtonBackoffice from "../atoms/Button/ButtonBackoffice";
 
-// Liens de navigation
 const NAV_LINKS = [
-  { to: '/animation', label: 'Animation' },
-  { to: '/evenements', label: 'Événements' },
-  { to: '/qui-sommes-nous', label: 'Qui sommes-nous' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/recrutement', label: 'Recrutement' }, // Ajout de la page Recrutement
+  { to: "/animation", label: "Animation" },
+  { to: "/evenements", label: "Événements" },
+  { to: "#about", label: "Qui sommes-nous" },
+  { to: "/contact", label: "Contact" },
+  { to: "/recrutement", label: "Recrutement" },
 ] as const;
 
 const Navbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [scrolling, setScrolling] = useState(false); // État pour détecter le scroll
+  const [scrolling, setScrolling] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Fonction pour ouvrir/fermer le menu mobile
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-  };
-
-  // Effet pour détecter le scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolling(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+  const handleScroll = useCallback(() => {
+    setScrolling(window.scrollY > 50);
   }, []);
 
-  // Fonction pour rediriger vers la page de connexion
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   const handleLoginClick = () => {
-    navigate('/login');
+    if (location.pathname !== "/login") {
+      navigate("/login");
+    }
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Si nous ne sommes pas sur la page d'accueil, naviguer vers elle
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Attendre que la navigation soit terminée avant de scroll
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    } else {
+      // Si nous sommes déjà sur la page d'accueil, juste scroll vers le haut
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleLinkClick = (to: string) => {
+    if (to.startsWith("#")) {
+      setTimeout(() => {
+        const element = document.getElementById(to.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    } else {
+      navigate(to);
+      setIsMenuOpen(false);
+    }
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 w-full h-20 flex items-center transition-all duration-300 ${
-        scrolling ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-transparent'
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
+        scrolling ? "bg-white/95 backdrop-blur-md shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/" className="flex items-center" aria-label="Accueil">
-          <Logo />
-        </Link>
+      <div className="container mx-auto px-4 md:px-8">
+        {/* Flex container principal */}
+        <div className="flex items-center h-20">
+          {/* Logo - largeur fixe */}
+          <div className="w-[150px] flex-shrink-0">
+            <button
+              onClick={handleLogoClick}
+              className="flex items-center"
+              aria-label="Retour en haut de la page d'accueil"
+            >
+              <Logo />
+            </button>
+          </div>
 
-        {/* Liens de navigation pour écrans larges */}
-        <div className="hidden md:flex space-x-8">
-          {NAV_LINKS.map(({ to, label }) => (
-            <motion.div key={to} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to={to}
+          {/* Le reste du code reste identique... */}
+          <div className="hidden md:flex flex-1 justify-center">
+            <div className="flex space-x-8">
+              {NAV_LINKS.map(({ to, label }) => (
+                <div key={to} className="relative">
+                  <Link
+                    to={to.startsWith("#") ? "/" : to}
+                    onClick={() => to.startsWith("#") && handleLinkClick(to)}
+                    className={`
+                      relative
+                      inline-block
+                      px-4
+                      py-2
+                      text-lg
+                      font-semibold
+                      text-gray-900
+                      tracking-wide
+                      transition-all
+                      duration-300
+                      hover:text-blue-700
+                      before:content-['']
+                      before:absolute
+                      before:bottom-0
+                      before:left-0
+                      before:w-full
+                      before:h-1
+                      before:bg-blue-600
+                      before:scale-x-0
+                      before:transition-transform
+                      before:duration-300
+                      hover:before:scale-x-100
+                      hover:before:origin-left
+                      ${location.pathname === to ? "text-blue-700 before:scale-x-100" : ""}
+                    `}
+                  >
+                    {label}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden md:flex w-[150px] justify-end flex-shrink-0">
+            <ButtonBackoffice onClick={handleLoginClick} />
+          </div>
+
+          <div className="flex md:hidden ml-auto">
+            <button
+              onClick={toggleMenu}
+              className="p-2 text-gray-600 hover:text-gray-900"
+              aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={isMenuOpen}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Menu Mobile inchangé */}
+        <div 
+          className={`md:hidden transition-all duration-300 ease-in-out ${
+            isMenuOpen 
+              ? "max-h-screen opacity-100" 
+              : "max-h-0 opacity-0"
+          } bg-white overflow-hidden`}
+        >
+          <div className="px-4 py-4 space-y-4">
+            {NAV_LINKS.map(({ to, label }) => (
+              <button
+                key={to}
+                onClick={() => handleLinkClick(to)}
                 className={`
-                  text-gray-950
-                  font-medium 
-                  font-bebas 
-                  relative 
-                  group
-                  hover:text-gray-700
-                  transition-all duration-300
-                  ${location.pathname === to ? 'text-gray-900' : ''}
+                  block w-full text-left py-2
+                  text-lg font-semibold text-gray-900
+                  transition-colors duration-200 
+                  hover:text-blue-700
+                  ${location.pathname === to ? "text-blue-700" : ""}
                 `}
               >
                 {label}
-                <span className="absolute bottom-[-6px] left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-            </motion.div>
-          ))}
+              </button>
+            ))}
+            <div className="pt-4">
+              <ButtonBackoffice onClick={handleLoginClick} />
+            </div>
+          </div>
         </div>
-
-        {/* Bouton de connexion */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleLoginClick}
-          className="hidden md:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          Connexion
-        </motion.button>
-
-        {/* Bouton hamburger pour mobile */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={toggleMobileMenu}
-          className="md:hidden text-white focus:outline-none"
-          aria-label="Menu mobile"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </motion.button>
-
-        {/* Menu mobile */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden fixed top-20 left-0 right-0 bg-black/90 backdrop-blur-md"
-            >
-              <div className="flex flex-col items-center space-y-4 py-6">
-                {NAV_LINKS.map(({ to, label }) => (
-                  <motion.div key={to} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Link
-                      to={to}
-                      onClick={toggleMobileMenu}
-                      className={`
-                        text-white 
-                        text-xl 
-                        font-medium 
-                        font-bebas
-                        hover:text-blue-400
-                        transition-colors
-                        ${location.pathname === to ? 'text-blue-400' : ''}
-                      `}
-                    >
-                      {label}
-                    </Link>
-                  </motion.div>
-                ))}
-                {/* Bouton de connexion pour mobile */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleLoginClick}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Connexion
-                </motion.button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 

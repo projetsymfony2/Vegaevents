@@ -37,12 +37,17 @@ const sections: Section[] = [
 const About: React.FC = () => {
   const [introVisible, setIntroVisible] = useState<boolean>(false);
   const [visibleSections, setVisibleSections] = useState<Set<number>>(new Set());
+  const [visibleParagraphs, setVisibleParagraphs] = useState<Set<string>>(new Set());
   const introRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const paragraphRefs = useRef<(HTMLLIElement | null)[]>([]);
 
-  // Gestion des références avec useCallback
   const setSectionRef = useCallback((index: number) => (el: HTMLDivElement | null) => {
     sectionRefs.current[index] = el;
+  }, []);
+
+  const setParagraphRef = useCallback((index: number, sectionIndex: number) => (el: HTMLLIElement | null) => {
+    paragraphRefs.current[sectionIndex * 10 + index] = el;
   }, []);
 
   useEffect(() => {
@@ -62,6 +67,12 @@ const About: React.FC = () => {
           if (sectionIndex !== -1 && entry.isIntersecting) {
             setVisibleSections(prev => new Set([...prev, sectionIndex]));
             observer.unobserve(entry.target);
+          } else {
+            const paragraphIndex = paragraphRefs.current.findIndex(ref => ref === entry.target);
+            if (paragraphIndex !== -1 && entry.isIntersecting) {
+              setVisibleParagraphs(prev => new Set([...prev, paragraphIndex.toString()]));
+              observer.unobserve(entry.target);
+            }
           }
         }
       });
@@ -74,6 +85,10 @@ const About: React.FC = () => {
     }
 
     sectionRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    paragraphRefs.current.forEach(ref => {
       if (ref) observer.observe(ref);
     });
 
@@ -92,15 +107,7 @@ const About: React.FC = () => {
         `}
         aria-hidden={!introVisible}
       >
-        {/* Image décorative */}
-        {/* <img 
-          src="/Calendar_object.svg" 
-          alt="Objet calendrier décoratif" 
-          className="fixed w-32 h-32 top-24 right-0  transform -translate-x-1/2" 
-        /> */}
-
-        {/* Titre et texte */}
-        <h1 className="text-3xl md:text-5xl font-montserrat text-gray-900">
+        <h1 className="text-3xl md:text-6xl font-montserrat font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-blue-800 bg-clip-text text-transparent z-10 leading-tight tracking-wider">
           L'Expertise au Service de vos Animations et Événements
         </h1>
         <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -110,34 +117,42 @@ const About: React.FC = () => {
       </div>
 
       {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full justify-items-center max-w-7xl mx-auto">
-        {sections.map((section, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full justify-items-center max-w-7xl mx-auto">
+        {sections.map((section, sectionIndex) => (
           <div
             key={section.title}
-            ref={setSectionRef(index)}
+            ref={setSectionRef(sectionIndex)}
             className={`
-              bg-white rounded-xl shadow-lg p-8 max-w-xs w-full
+              bg-gradient-to-b from-white via-gray-50 to-gray-100 rounded-2xl shadow-xl p-6 w-full
               transform transition-all duration-700 ease-in-out
-              ${visibleSections.has(index) 
+              ${visibleSections.has(sectionIndex) 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-12'}
             `}
-            aria-hidden={!visibleSections.has(index)}
+            aria-hidden={!visibleSections.has(sectionIndex)}
           >
             <div className="flex flex-col items-center">
-              <div className="w-12 h-12 mb-4 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-2xl text-blue-600">
-                  {index + 1}
+              <div className="w-14 h-14 mb-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+                <span className="text-xl font-bold text-white">
+                  {sectionIndex + 1}
                 </span>
               </div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
                 {section.title}
               </h2>
-              <ul className="space-y-3">
-                {section.content.map((item, idx) => (
+              <ul className="space-y-3 text-gray-700">
+                {section.content.map((item, paragraphIndex) => (
                   <li 
-                    key={idx}
-                    className="text-gray-600 text-lg flex items-start"
+                    key={paragraphIndex}
+                    ref={setParagraphRef(paragraphIndex, sectionIndex)}
+                    className={`
+                      text-base flex items-start leading-relaxed
+                      transition-all duration-700 ease-in-out transform
+                      ${visibleParagraphs.has((sectionIndex * 10 + paragraphIndex).toString()) 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-6'}
+                    `}
+                    aria-hidden={!visibleParagraphs.has((sectionIndex * 10 + paragraphIndex).toString())}
                   >
                     <span className="block">{item}</span>
                   </li>

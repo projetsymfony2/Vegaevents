@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../utils/supabaseClient';
-import CvList from '../organisms/CvlIst'; // Importe le composant CvList
+import CvList from '../organisms/CvList'; // Importe le composant CvList
 
 interface ContactMessage {
   id: number;

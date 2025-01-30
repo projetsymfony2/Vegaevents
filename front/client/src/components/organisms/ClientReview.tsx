@@ -66,7 +66,7 @@ const TestimonialsSection: React.FC = () => {
     <section className=" py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-montserrat text-gray-900 mb-4">
+          <h2 className="text-5xl md:text-6xl font-montserrat font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-blue-800 bg-clip-text text-transparent z-10 leading-tight tracking-wider">
             Ils nous font confiance
           </h2>
           <p className="text-xl text-gray-600">
