@@ -1,4 +1,3 @@
-// src/components/pages/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth'; 
@@ -73,6 +72,10 @@ const Login: React.FC = () => {
           >
             Se connecter
           </button>
+          {/* Lien pour réinitialiser le mot de passe */}
+          <p className="text-sm text-blue-500 text-center mt-2">
+            <a href="/reset-password" className="hover:underline">Mot de passe oublié ?</a>
+          </p>
         </form>
       </div>
     </div>

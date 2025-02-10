@@ -1,6 +1,6 @@
 // src/context/useAuth.ts
 import { useContext } from 'react';
-import { AuthContext } from './authContextValues'; // Importe le contexte depuis le fichier séparé
+import { AuthContext } from './authContextValues'; 
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

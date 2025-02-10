@@ -86,6 +86,7 @@ const Home: React.FC = () => {
       <div ref={contactRef}>
         <PageContact />
       </div>
+      
       {!isLastSection && (
         <div className="fixed bottom-4 right-10 z-20">
           <Button
@@ -111,6 +112,6 @@ const Home: React.FC = () => {
       )}
     </div>
   );
-};
+};  
 
 export default Home;

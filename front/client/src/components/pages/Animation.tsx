@@ -6,7 +6,10 @@ const Animations = () => {
   const introRef = useRef<HTMLDivElement | null>(null);
   const textRef = useRef<HTMLDivElement | null>(null);
 
+  // Utilisation de useEffect pour effectuer un scroll vers le haut lors du montage
   useEffect(() => {
+    window.scrollTo(0, 0); // Fait défiler la page vers le haut
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -40,7 +43,7 @@ const Animations = () => {
         observer.unobserve(currentTextRef);
       }
     };
-  }, []);
+  }, []); // Ce useEffect se déclenche une seule fois au montage du composant
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-blue-50 to-purple-100">

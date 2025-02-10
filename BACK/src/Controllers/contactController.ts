@@ -4,7 +4,7 @@ import { createContact, getContacts } from '../models/contactModel';
 
 export const submitContactForm = async (req: Request, res: Response) => {
   const { name, email, phone, message } = req.body;
-
+  
   if (!name || !email || !phone || !message) {
     return res.status(400).json({ message: 'Tous les champs sont obligatoires' });
   }

@@ -45,7 +45,7 @@ const Accueil: React.FC = () => {
           </h1>
           
           <p className={`text-slate-700 text-xl md:text-2xl mb-8 transition-all duration-2000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-            L'excellence dans l'événementiel pharmaceutique
+          Votre Partenaire pour des Événements et Animations Réussis
           </p>
 
           <div className="absolute top-1/4 left-10 w-20 h-20 bg-indigo-200 rounded-full opacity-20 animate-pulse" />

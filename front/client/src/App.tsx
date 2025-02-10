@@ -7,7 +7,9 @@ import AboutEvents from './components/pages/AboutEvents';
 import Contact from './components/pages/PageContact';
 import Login from './components/pages/Login';
 import Backoffice from './components/pages/Backoffice';
-import Recrutement from './components/pages/Recrutement'; // Importez le composant Recruitment
+import Recrutement from './components/pages/Recrutement'; 
+import ResetPassword from './components/pages/ResetPassword';
+import ResetPasswordPage from './components/molecules/ResetPasswordPage';
 import './index.css';
 
 const App: React.FC = () => {
@@ -25,6 +27,9 @@ const App: React.FC = () => {
         {/* Route pour la page de connexion */}
         <Route path="/login" element={<Login />} />
         <Route path="/backoffice" element={<Backoffice />} />
+        <Route path="/reset-password-page" element={<ResetPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        
       </Routes>
     </Router>
   );

@@ -3,6 +3,8 @@ import { supabase } from '../../utils/supabaseClient';
 
 const RecruitmentPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [contentVisible, setContentVisible] = useState(false);
@@ -50,8 +52,8 @@ const RecruitmentPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) {
-      setMessage('Veuillez sélectionner un fichier.');
+    if (!file || !fullName || !phoneNumber) {
+      setMessage('Veuillez remplir tous les champs (Nom, Numéro de téléphone et CV).');
       return;
     }
     setUploading(true);
@@ -62,8 +64,14 @@ const RecruitmentPage: React.FC = () => {
         .from('cv-bucket')
         .upload(fileName, file);
       if (error) throw error;
+
+      // Vous pouvez ici appeler votre API pour envoyer `fullName` et `phoneNumber` avec l'URL du fichier
+      // par exemple, avec fetch ou Axios
+
       setMessage('CV téléchargé avec succès !');
       setFile(null);
+      setFullName('');
+      setPhoneNumber('');
     } catch (error) {
       console.error('Erreur lors du téléchargement du fichier :', error);
       setMessage('Erreur lors du téléchargement du fichier.');
@@ -112,53 +120,80 @@ const RecruitmentPage: React.FC = () => {
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Champ Nom */}
                   <div className="space-y-4">
                     <label
-                      htmlFor="cv"
+                      htmlFor="fullName"
                       className="block text-lg font-medium text-gray-700"
                     >
-                      Téléchargez votre CV (PDF uniquement, max 5 Mo)
+                      Nom Complet
                     </label>
-                    
-                    {/* Zone de dépôt de fichier stylisée */}
-                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-400 transition-colors duration-300">
-                      <div className="space-y-2 text-center">
-                        <div className="flex text-sm text-gray-600">
-                          <input
-                            type="file"
-                            id="cv"
-                            accept=".pdf"
-                            onChange={handleFileChange}
-                            disabled={uploading}
-                            className="sr-only"
-                          />
-                          <label
-                            htmlFor="cv"
-                            className="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
-                          >
-                            <div className="flex flex-col items-center">
-                              <svg
-                                className="mx-auto h-12 w-12 text-gray-400"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 48 48"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                  strokeWidth={2}
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <span className="mt-2">{file ? file.name : 'Sélectionner un fichier'}</span>
-                            </div>
-                          </label>
-                        </div>
-                        <p className="text-xs text-gray-500">
-                          PDF jusqu'à 5MB
-                        </p>
+                    <input
+                      type="text"
+                      id="fullName"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Champ Numéro de téléphone */}
+                  <div className="space-y-4">
+                    <label
+                      htmlFor="phoneNumber"
+                      className="block text-lg font-medium text-gray-700"
+                    >
+                      Numéro de téléphone
+                    </label>
+                    <input
+                      type="text"
+                      id="phoneNumber"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Zone de dépôt de fichier stylisée */}
+                  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-400 transition-colors duration-300">
+                    <div className="space-y-2 text-center">
+                      <div className="flex text-sm text-gray-600">
+                        <input
+                          type="file"
+                          id="cv"
+                          accept=".pdf"
+                          onChange={handleFileChange}
+                          disabled={uploading}
+                          className="sr-only"
+                        />
+                        <label
+                          htmlFor="cv"
+                          className="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500"
+                        >
+                          <div className="flex flex-col items-center">
+                            <svg
+                              className="mx-auto h-12 w-12 text-gray-400"
+                              stroke="currentColor"
+                              fill="none"
+                              viewBox="0 0 48 48"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                            <span className="mt-2">{file ? file.name : 'Sélectionner un fichier'}</span>
+                          </div>
+                        </label>
                       </div>
+                      <p className="text-xs text-gray-500">
+                        PDF jusqu'à 5MB
+                      </p>
                     </div>
                   </div>
 
