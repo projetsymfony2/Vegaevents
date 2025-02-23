@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../organisms/Navbar';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons'; // Importation des icônes
 
 // Définition du type pour particlesJS
 interface ParticlesJS {
@@ -19,9 +21,6 @@ declare global {
   }
 }
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram, faLinkedin, faFacebook } from '@fortawesome/free-brands-svg-icons'; // Importation des icônes
-
 const Layout: React.FC = () => {
   useEffect(() => {
     if (typeof window.particlesJS !== 'undefined') {
@@ -32,7 +31,7 @@ const Layout: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen font-sans bg-gray-50">
       {/* Conteneur pour particles.js */}
       <div
         id="particles-js"
@@ -75,21 +74,21 @@ const Layout: React.FC = () => {
               <div className="flex space-x-4">
                 <a
                   href="https://www.instagram.com"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-800 hover:opacity-90 transition-opacity"
+                  className="h-10 w-10 flex items-center justify-center rounded-full bg-purple-600 hover:bg-purple-700 transition"
                   aria-label="Instagram"
                 >
                   <FontAwesomeIcon icon={faInstagram} className="text-white w-5 h-5" />
                 </a>
                 <a
                   href="https://www.linkedin.com"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-800 hover:opacity-90 transition-opacity"
+                  className="h-10 w-10 flex items-center justify-center rounded-full bg-blue-700 hover:bg-blue-800 transition"
                   aria-label="LinkedIn"
                 >
                   <FontAwesomeIcon icon={faLinkedin} className="text-white w-5 h-5" />
                 </a>
                 <a
                   href="https://www.facebook.com"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-800 hover:opacity-90 transition-opacity"
+                  className="h-10 w-10 flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 transition"
                   aria-label="Facebook"
                 >
                   <FontAwesomeIcon icon={faFacebook} className="text-white w-5 h-5" />

@@ -4,8 +4,7 @@ const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
@@ -15,8 +14,10 @@ const ResetPassword: React.FC = () => {
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.json();
 
+    
+      const data = await response.json();
+      
       if (!response.ok) {
         throw new Error(data.error || 'Une erreur est survenue');
       }

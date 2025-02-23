@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+     "start": "node dist/index.js",
+    "build": "tsc",
     "dev": "nodemon --exec tsx src/index.ts"
   },
   "dependencies": {
@@ -17,6 +19,7 @@
     "@types/express": "^5.0.0",
     "@types/express-fileupload": "^1.5.1",
     "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
     "typescript": "^5.7.3"
   }

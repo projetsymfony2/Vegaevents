@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSpring, animated, SpringValue, config } from '@react-spring/web';
 import { useInView } from 'react-intersection-observer';
-
-// Importation des images
-import animationImage from '../../assets/animation.jpeg';
-import evenementsImage from '../../assets/events.svg';
+import { supabase } from '../../utils/supabaseClient';
 
 interface SpringStyles {
   opacity: SpringValue<number>;
@@ -17,7 +14,11 @@ const Services: React.FC = () => {
   const [refSubtitle, inViewSubtitle] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [refAnimation, inViewAnimation] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [refEvenements, inViewEvenements] = useInView({ triggerOnce: true, threshold: 0.2 });
-
+  
+  // State for storing image URLs from Supabase
+  const [animationImageUrl, setAnimationImageUrl] = useState<string | null>(null);
+  const [evenementsImageUrl, setEvenementsImageUrl] = useState<string | null>(null);
+  
   // Animation pour le titre principal
   const titleStyle = useSpring({
     from: { 
@@ -71,58 +72,149 @@ const Services: React.FC = () => {
     },
     delay: 400
   });
+  
+  // Fetch images from Supabase storage
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        // Get animation image
+        const { data: animationData } = await supabase
+          .storage
+          .from('images')
+          .getPublicUrl('animation.jpeg');
+        
+        if (animationData) {
+          setAnimationImageUrl(animationData.publicUrl);
+        }
+        
+        // Get events image
+        const { data: eventsData } = await supabase
+          .storage
+          .from('images')
+          .getPublicUrl('events.svg');
+        
+        if (eventsData) {
+          setEvenementsImageUrl(eventsData.publicUrl);
+        }
+      } catch (error) {
+        console.error('Error in fetching images:', error);
+      }
+    };
+    
+    fetchImages();
+  }, []);
+
+  // Fallback images if Supabase fails
+  const fallbackAnimationImage = '/fallback/animation.jpeg';
+  const fallbackEvenementsImage = '/fallback/events.svg';
 
   return (
-    <section className="relative w-full py-20 mx-auto ">
-      <div className="container mx-auto text-center relative pt-4">
-        {/* Titre principal animé avec effet de gradient */}
-        <div className="flex justify-center items-center mb-10">
-          <animated.h1
-            ref={refTitle}
-            style={titleStyle}
-            className="text-5xl md:text-6xl font-montserrat font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-blue-800 bg-clip-text text-transparent z-10 leading-tight tracking-wider"
-          >
-            Préstations
-          </animated.h1>
-        </div>
-
-        {/* Sous-titre avec animation */}
-        <animated.div 
-          ref={refSubtitle}
-          style={subtitleStyle}
-          className="text-xl md:text-2xl text-gray-700 px-4 md:px-12 mx-auto max-w-4xl"
+    <div className="relative w-full min-h-screen bg-white">
+      {/* Modern Geometric Background Divider */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+        {/* Main geometric shape */}
+        <svg 
+          className="absolute w-full h-4/5"
+          viewBox="0 0 1200 800" 
+          preserveAspectRatio="none"
         >
-          <h2 className="font-montserrat text-gray-800 mb-4 text-center leading-relaxed">
-            Vega Events : <span className="text-purple-600">Votre partenaire incontournable</span> pour des événements et animations inoubliables
-          </h2>
-        </animated.div>
-
-        {/* Conteneur Flex pour les blocs */}
-        <div className="flex flex-col md:flex-row w-full h-auto justify-center gap-8 mt-12 px-4">
-          {/* Bloc Animations */}
-          <ServiceBlock
-            ref={refAnimation}
-            to="/animation"
-            image={animationImage}
-            alt="Animations"
-            title="Animations"
-            style={animationStyle}
-            text="Magasins de vente de parfums et produits de beauté, Salons, parcs des expositions, grandes surfaces de distribution alimentaire"
+          <defs>
+            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f3e8ff" />
+              <stop offset="100%" stopColor="#f0f9ff" />
+            </linearGradient>
+          </defs>
+          
+          {/* Base geometric shape */}
+          <path 
+            d="M0,0 L1200,0 L1200,600 C900,550 700,700 0,670 Z" 
+            fill="url(#bgGradient)"
           />
-
-          {/* Bloc Événements */}
-          <ServiceBlock
-            ref={refEvenements}
-            to="/aboutevents"
-            image={evenementsImage}
-            alt="Événements"
-            title="Événements"
-            style={evenementsStyle}
-            text="Organisation d'événements artistiques : Congrès, défilés de mode, expositions d'arts plastiques, galas, mariages"
+          
+          {/* Subtle accent lines */}
+          <path 
+            d="M0,50 C300,30 600,70 1200,40" 
+            fill="none" 
+            stroke="#c4b5fd" 
+            strokeWidth="1" 
+            opacity="0.3"
           />
-        </div>
+          <path 
+            d="M0,100 C400,80 800,120 1200,90" 
+            fill="none" 
+            stroke="#c4b5fd" 
+            strokeWidth="1" 
+            opacity="0.3"
+          />
+          <path 
+            d="M0,150 C350,130 750,170 1200,140" 
+            fill="none" 
+            stroke="#c4b5fd" 
+            strokeWidth="1" 
+            opacity="0.3"
+          />
+          
+          {/* Subtle accent circles */}
+          <circle cx="200" cy="200" r="5" fill="#8b5cf6" opacity="0.15" />
+          <circle cx="400" cy="120" r="3" fill="#8b5cf6" opacity="0.1" />
+          <circle cx="600" cy="250" r="7" fill="#8b5cf6" opacity="0.1" />
+          <circle cx="900" cy="180" r="4" fill="#8b5cf6" opacity="0.15" />
+          <circle cx="1100" cy="240" r="6" fill="#8b5cf6" opacity="0.1" />
+        </svg>
       </div>
-    </section>
+
+      {/* Contenu Principal */}
+      <section className="relative w-full py-20 mx-auto">
+        <div className="container mx-auto text-center relative pt-4 z-10">
+          {/* Titre principal animé avec effet de gradient */}
+          <div className="flex justify-center items-center mb-10">
+            <animated.h1
+              ref={refTitle}
+              style={titleStyle}
+              className="text-5xl md:text-6xl font-montserrat font-bold bg-gradient-to-r from-indigo-600 via-purple-700 to-blue-800 bg-clip-text text-transparent z-10 leading-tight tracking-wider"
+            >
+              Préstations
+            </animated.h1>
+          </div>
+
+          {/* Sous-titre avec animation */}
+          <animated.div 
+            ref={refSubtitle}
+            style={subtitleStyle}
+            className="text-xl md:text-2xl text-gray-700 px-4 md:px-12 mx-auto max-w-4xl"
+          >
+            <h2 className="font-montserrat text-gray-800 mb-4 text-center leading-relaxed">
+              Vega Events : <span className="text-purple-600">Votre partenaire incontournable</span> pour des événements et animations inoubliables
+            </h2>
+          </animated.div>
+
+          {/* Conteneur Flex pour les blocs */}
+          <div className="flex flex-col md:flex-row w-full h-auto justify-center gap-8 mt-12 px-4">
+            {/* Bloc Animations */}
+            <ServiceBlock
+              ref={refAnimation}
+              to="/animation"
+              image={animationImageUrl || fallbackAnimationImage}
+              alt="Animations"
+              title="Animations"
+              style={animationStyle}
+              text="Magasins de vente de parfums et produits de beauté, Salons, parcs des expositions, grandes surfaces de distribution alimentaire"
+            />
+
+            {/* Bloc Événements */}
+            <ServiceBlock
+              ref={refEvenements}
+              to="/aboutevents"
+              image={evenementsImageUrl || fallbackEvenementsImage}
+              alt="Événements"
+              title="Événements"
+              style={evenementsStyle}
+              text="Organisation d'événements artistiques : Congrès, défilés de mode, expositions d'arts plastiques, galas, mariages"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 
@@ -173,7 +265,7 @@ const ServiceBlock = React.forwardRef<HTMLAnchorElement, ServiceBlockProps>(
               className="w-full h-full object-cover object-top rounded-xl transform transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
               onError={(e) => {
-                e.currentTarget.src = 'path/to/fallback-image.jpg';
+                e.currentTarget.src = '/fallback/fallback-image.jpg';
               }}
             />
             {/* Overlay avec titre */}
